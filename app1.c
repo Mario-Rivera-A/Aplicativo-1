@@ -90,7 +90,7 @@ int pls() {
     }
 
     // Imprimir las pizzas menos vendidas
-    printf("Pizzas menos vendidas:\n");
+    printf("Pizzas menos vendidas: ");
     for (int i = 1; i < num_pizzas; i++) {
         if (pizzas[i].count == min_sales) {
             printf("%s\n", pizzas[i].name);
@@ -164,7 +164,7 @@ int pms() {
     }
 
     // Imprimir las pizzas más vendidas
-    printf("Pizzas mas vendidas:\n");
+    printf("Pizzas mas vendidas: ");
     for (int i = 0; i < num_pizzas; i++) {
         if (pizzas[i].count == max_sales) {
             printf("%s\n", pizzas[i].name);
@@ -732,7 +732,6 @@ int apo() {
     float total_pizzas = 0;
     for (int i = 0; i < num_orders; i++) {
         total_pizzas += (float)orders[i].total_pizzas / orders[i].num_orders;
-        printf("Orden %d: %d pizzas\n", orders[i].order_id, orders[i].total_pizzas);
     }
     
     float average_pizzas_per_order = total_pizzas / num_orders;
@@ -743,18 +742,101 @@ int apo() {
     return 0;
 }
 
+#define MAX_DATES 100
+
+typedef struct {
+    char date[11];
+    int num_pizzas;
+} DatePizzas;
+
+int apd() {
+    FILE *file;
+    char filename[] = "ventas.csv";
+    char line[1024];
+    char *token;
+    DatePizzas dates[MAX_DATES];
+    int num_dates = 0;
+
+    // Abrir archivo
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("No se pudo abrir el archivo %s.\n", filename);
+        return 1;
+    }
+
+    // Inicializar total de pizzas para cada fecha
+    for (int i = 0; i < MAX_DATES; i++) {
+        dates[i].num_pizzas = 0;
+    }
+
+    // Leer archivo línea por línea
+    while (fgets(line, sizeof(line), file)) {
+        // Obtener la fecha y el número de pizzas
+        token = strtok(line, ";"); // Ignorar pizza_id
+        token = strtok(NULL, ";"); // Ignorar order_id
+        token = strtok(NULL, ";"); // Ignorar pizza_name_id
+        int quantity = atoi(strtok(NULL, ";")); // Obtener quantity
+        token = strtok(NULL, ";"); // Obtener order_date
+        char *date = token;
+        token = strtok(NULL, ";"); // Ignorar order_time
+        token = strtok(NULL, ";"); // Ignorar unit_price
+        token = strtok(NULL, ";"); // Ignorar total_price
+        token = strtok(NULL, ";"); // Ignorar pizza_size
+        token = strtok(NULL, ";"); // Ignorar pizza_category
+        token = strtok(NULL, ";"); // Ignorar pizza_ingredients
+        token = strtok(NULL, ";"); // Ignorar pizza_name
+
+        // Quitar el salto de línea de la fecha
+        date[strcspn(date, "\n")] = 0;
+
+        // Actualizar el número total de pizzas para cada fecha
+        int found = 0;
+        for (int i = 0; i < num_dates; i++) {
+            if (strcmp(dates[i].date, date) == 0) {
+                dates[i].num_pizzas += quantity;
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            strcpy(dates[num_dates].date, date);
+            dates[num_dates].num_pizzas = quantity;
+            num_dates++;
+        }
+    }
+
+    // Cerrar archivo
+    fclose(file);
+
+    for(int i = 0; i < num_dates - 1; i++) {
+        dates[i] = dates[i + 1];
+    }
+    num_dates--;
+
+    // Calcular el promedio de pizzas por día
+    int total_pizzas = 0;
+    for (int i = 0; i < num_dates; i++) {
+        total_pizzas += dates[i].num_pizzas;
+    }
+    float average_pizzas = (float)total_pizzas / num_dates;
+
+    // Imprimir el promedio de pizzas por día
+    printf("Promedio de pizzas por dia es: %.2f\n", average_pizzas);
+
+    return 0;
+}
+
 
 int main(int argc, char *argv[]) {
-    // if (argc < 3) {
-    //     printf("Uso: %s [nombre_archivo.csv] [funcion1] [funcion2] ...\n", argv[0]);
-    //     return 1;
-    // }
-
-    apo();
-
+    if (argc < 3) {
+        printf("Uso: %s [nombre_archivo.csv] [funcion1] [funcion2] ...\n", argv[0]);
+        return 1;
+    }
+    while(getchar() != '\n');
+    char *function_name = getchar();
     // Llama a las funciones especificadas en los argumentos de la línea de comandos
     for (int i = 2; i < argc; i++) {
-        char *function_name = argv[i];
+        // char *function_name = argv[i];
         char *result = NULL;
 
         // Llama a la función correspondiente
@@ -763,17 +845,21 @@ int main(int argc, char *argv[]) {
         } else if (strcmp(function_name, "pms") == 0) {
             result = pms();
         } else if (strcmp(function_name, "dms") == 0) {
-            result = dms(); // Agrega más funciones aquí...
+            result = dms(); 
         } else if (strcmp(function_name, "dls") == 0) {
-            result = dls(); // Agrega más funciones aquí...
+            result = dls(); 
         } else if (strcmp(function_name, "dmsp") == 0) {
-            result = dmsp(); // Agrega más funciones aquí...
+            result = dmsp();
         } else if (strcmp(function_name, "dlsp") == 0) {
-            result = dlsp(); // Agrega más funciones aquí...
-        } else if (strcmp(function_name, "ims") == 0) {
-            result = ims(); // Agrega más funciones aquí...
+            result = dlsp();
+        } else if (strcmp(function_name, "apo") == 0) {
+            result = apo(); 
+        } else if (strcmp(function_name, "apd") == 0) {
+            result = apd(); 
+        }  else if (strcmp(function_name, "ims") == 0) {
+            result = ims(); 
         } else if (strcmp(function_name, "hp") == 0) {
-            result = hp(); // Agrega más funciones aquí...
+            result = hp(); 
         } 
          
         if (result != NULL) {
