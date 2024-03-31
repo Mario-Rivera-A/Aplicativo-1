@@ -508,14 +508,249 @@ char dlsp() {
     return 0;
 }
 
+#define MAX_INGREDIENTS 1000
 
-int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        printf("Uso: %s [nombre_archivo.csv] [funcion1] [funcion2] ...\n", argv[0]);
+typedef struct {
+    char name[MAX_CHAR_PER_LINE];
+    int count;
+} IngredientCount;
+
+int ims() {
+    FILE *file;
+    char filename[] = "ventas.csv";
+    char line[MAX_CHAR_PER_LINE];
+    char *token;
+    IngredientCount ingredients[MAX_INGREDIENTS];
+    int num_ingredients = 0;
+
+    // Abrir archivo
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
-    // dms();
+    // Leer archivo línea por línea
+    while (fgets(line, sizeof(line), file)) {
+        // Obtener los ingredientes de la pizza
+        token = strtok(line, ";");
+        for (int i = 0; i < 9; i++) {
+            token = strtok(NULL, ";"); // Ignorar las primeras 9 columnas
+        }
+        token = strtok(NULL, ";"); // Obtener los ingredientes
+
+        // Tokenizar los ingredientes
+        char *ingredient = strtok(token, ",");
+        while (ingredient != NULL) {
+            // Quitar espacios en blanco al principio y al final del ingrediente
+            while (*ingredient == ' ') {
+                ingredient++;
+            }
+            char *end = ingredient + strlen(ingredient) - 1;
+            while (end > ingredient && *end == ' ') {
+                *end-- = '\0';
+            }
+
+            // Verificar si el ingrediente ya está en la lista
+            int found = -1;
+            for (int i = 0; i < num_ingredients; i++) {
+                if (strcmp(ingredients[i].name, ingredient) == 0) {
+                    found = i;
+                    break;
+                }
+            }
+
+            // Si el ingrediente no está en la lista, añadirlo
+            if (found == -1) {
+                strcpy(ingredients[num_ingredients].name, ingredient);
+                ingredients[num_ingredients].count = 1;
+                num_ingredients++;
+            } else {
+                ingredients[found].count++;
+            }
+
+            // Obtener el siguiente ingrediente
+            ingredient = strtok(NULL, ",");
+        }
+    }
+
+    // Cerrar archivo
+    fclose(file);
+
+    // Encontrar la cantidad máxima de ventas de un ingrediente
+    int max_sales = 0;
+    for (int i = 0; i < num_ingredients; i++) {
+        if (ingredients[i].count > max_sales) {
+            max_sales = ingredients[i].count;
+        }
+    }
+
+    // Imprimir los ingredientes más vendidos
+    printf("Ingredientes mas vendidos:\n");
+    for (int i = 0; i < num_ingredients; i++) {
+        if (ingredients[i].count == max_sales) {
+            printf("%s\n", ingredients[i].name);
+        }
+    }
+
+    return 0;
+}
+
+typedef struct {
+    char category[MAX_CHAR_PER_LINE];
+    int count;
+} PizzaCategoryCount;
+
+int hp() {
+    FILE *file;
+    char filename[] = "ventas.csv";
+    char line[MAX_CHAR_PER_LINE];
+    char *token;
+    PizzaCategoryCount categories[MAX_CHAR_PER_LINE];
+    int num_categories = 0;
+
+    // Abrir archivo
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("No se pudo abrir el archivo %s.\n", filename);
+        return 1;
+    }
+
+    // Leer archivo línea por línea
+    while (fgets(line, sizeof(line), file)) {
+        // Obtener la categoría de la pizza
+        token = strtok(line, ";"); // Ignorar la primera columna
+        token = strtok(NULL, ";"); // Ignorar las siguientes 2 columnas
+        token = strtok(NULL, ";");
+        token = strtok(NULL, ";"); // Ignorar las siguientes 6 columnas
+        token = strtok(NULL, ";");
+        token = strtok(NULL, ";");
+        token = strtok(NULL, ";");
+        token = strtok(NULL, ";");
+        token = strtok(NULL, ";"); // Obtener la categoría
+        token = strtok(NULL, ";"); // Obtener la categoría
+
+
+        // Quitar el salto de línea de la categoría
+        token[strcspn(token, "\n")] = 0;
+
+        // Verificar si la categoría ya está en la lista
+        int found = -1;
+        for (int i = 0; i < num_categories; i++) {
+            if (strcmp(categories[i].category, token) == 0) {
+                found = i;
+                break;
+            }
+        }
+        
+   
+        // Si la categoría no está en la lista, añadirla
+        if (found == -1) {
+            strcpy(categories[num_categories].category, token);
+            categories[num_categories].count = 1;
+            num_categories++;
+        } else {
+            categories[found].count++;
+        }
+    }
+
+    // Cerrar archivo
+    fclose(file);
+
+    for(int i = 0; i < num_categories - 1; i++) {
+        categories[i] = categories[i + 1];
+    }
+    num_categories--;
+
+    // Imprimir la cantidad de pizzas vendidas por categoría
+    printf("Cantidad de pizzas vendidas por categoria:\n");
+    for (int i = 0; i < num_categories; i++) {
+        printf("%s: %d\n", categories[i].category, categories[i].count);
+    }
+
+    return 0;
+}
+
+typedef struct {
+    int order_id;
+    int total_pizzas;
+    int num_orders;
+} OrderPizzaCount;
+
+int apo() {
+    FILE *file;
+    char filename[] = "ventas.csv";
+    char line[MAX_CHAR_PER_LINE];
+    char *token;
+    OrderPizzaCount orders[MAX_CHAR_PER_LINE];
+    int num_orders = 0;
+
+    // Abrir archivo
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("No se pudo abrir el archivo %s.\n", filename);
+        return 1;
+    }
+
+    // Leer archivo línea por línea
+    while (fgets(line, sizeof(line), file)) {
+        // Obtener el ID de orden y la cantidad de pizzas
+        token = strtok(line, ";"); // Ignorar la primera columna
+        int order_id = atoi(strtok(NULL, ";")); // Obtener el ID de orden
+        strtok(NULL, ";"); // Ignorar la siguiente columna
+        int quantity = atoi(strtok(NULL, ";")); // Obtener la cantidad de pizzas
+
+        // Buscar si el ID de orden ya está registrado
+        int found = -1;
+        for (int i = 0; i < num_orders; i++) {
+            if (orders[i].order_id == order_id) {
+                found = i;
+                break;
+            }
+        }
+
+        // Si el ID de orden no está registrado, añadirlo
+        if (found == -1) {
+            orders[num_orders].order_id = order_id;
+            orders[num_orders].total_pizzas = quantity;
+            orders[num_orders].num_orders = 1;
+            num_orders++;
+        } else {
+            orders[found].total_pizzas += quantity;
+            orders[found].num_orders++;
+        }
+    }
+
+    // Cerrar archivo
+    fclose(file);
+
+    for(int i = 0; i < num_orders - 1; i++) {
+        orders[i] = orders[i + 1];
+    }
+    num_orders--;
+    // Calcular el promedio de pizzas por orden
+    float total_pizzas = 0;
+    for (int i = 0; i < num_orders; i++) {
+        total_pizzas += (float)orders[i].total_pizzas / orders[i].num_orders;
+        printf("Orden %d: %d pizzas\n", orders[i].order_id, orders[i].total_pizzas);
+    }
+    
+    float average_pizzas_per_order = total_pizzas / num_orders;
+
+    // Imprimir el promedio de pizzas por orden
+    printf("Promedio de pizzas por orden: %.2f\n", average_pizzas_per_order);
+
+    return 0;
+}
+
+
+int main(int argc, char *argv[]) {
+    // if (argc < 3) {
+    //     printf("Uso: %s [nombre_archivo.csv] [funcion1] [funcion2] ...\n", argv[0]);
+    //     return 1;
+    // }
+
+    apo();
 
     // Llama a las funciones especificadas en los argumentos de la línea de comandos
     for (int i = 2; i < argc; i++) {
@@ -535,6 +770,10 @@ int main(int argc, char *argv[]) {
             result = dmsp(); // Agrega más funciones aquí...
         } else if (strcmp(function_name, "dlsp") == 0) {
             result = dlsp(); // Agrega más funciones aquí...
+        } else if (strcmp(function_name, "ims") == 0) {
+            result = ims(); // Agrega más funciones aquí...
+        } else if (strcmp(function_name, "hp") == 0) {
+            result = hp(); // Agrega más funciones aquí...
         } 
          
         if (result != NULL) {
