@@ -66,7 +66,8 @@ int pls() {
             if (strcmp(pizzas[i].name, token) == 0) {
                 pizzas[i].count++;
                 found = 1;
-                break;
+                break; 
+                
             }
         }
 
