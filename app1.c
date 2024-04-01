@@ -6,8 +6,8 @@
 #define max_largo_nom_pizza 1000
 #define max_orders 1000
 typedef struct {
-    char name[max_largo_nom_pizza];
-    int count;
+    char nombre[max_largo_nom_pizza];
+    int cont;
 } PizzaCount;
 
 // Definición de la estructura Order
@@ -28,16 +28,16 @@ typedef struct {
 
 int pls() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
     PizzaCount pizzas[max_char_por_linea];
     int num_pizzas = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
@@ -63,8 +63,8 @@ int pls() {
         // Verificar si la pizza ya está en la lista
         int found = 0;
         for (int i = 0; i < num_pizzas; i++) {
-            if (strcmp(pizzas[i].name, token) == 0) {
-                pizzas[i].count++;
+            if (strcmp(pizzas[i].nombre, token) == 0) {
+                pizzas[i].cont++;
                 found = 1;
                 break; 
             }
@@ -72,8 +72,8 @@ int pls() {
 
         // Si no está en la lista, añadirlo
         if (!found) {
-            strcpy(pizzas[num_pizzas].name, token);
-            pizzas[num_pizzas].count = 1;
+            strcpy(pizzas[num_pizzas].nombre, token);
+            pizzas[num_pizzas].cont = 1;
             num_pizzas++;
         }
     }
@@ -82,18 +82,18 @@ int pls() {
     fclose(archivo);
 
     // Encontrar la cantidad mínima de ventas
-    int min_sales = pizzas[0].count;
+    int min_ventas = pizzas[0].cont;
     for (int i = 1; i < num_pizzas; i++) {
-        if (pizzas[i].count < min_sales) {
-            min_sales = pizzas[i].count;
+        if (pizzas[i].cont < min_ventas) {
+            min_ventas = pizzas[i].cont;
         }
     }
 
     // Imprimir las pizzas menos vendidas
     printf("Pizzas menos vendidas: ");
     for (int i = 1; i < num_pizzas; i++) {
-        if (pizzas[i].count == min_sales) {
-            printf("%s\n", pizzas[i].name);
+        if (pizzas[i].cont == min_ventas) {
+            printf("%s\n", pizzas[i].nombre);
         }
     }
 
@@ -102,16 +102,16 @@ int pls() {
 
 int pms() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
     PizzaCount pizzas[max_char_por_linea];
     int num_pizzas = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
@@ -137,8 +137,8 @@ int pms() {
         // Verificar si la pizza ya está en la lista
         int found = 0;
         for (int i = 0; i < num_pizzas; i++) {
-            if (strcmp(pizzas[i].name, token) == 0) {
-                pizzas[i].count++;
+            if (strcmp(pizzas[i].nombre, token) == 0) {
+                pizzas[i].cont++;
                 found = 1;
                 break;
             }
@@ -146,8 +146,8 @@ int pms() {
 
         // Si no está en la lista, añadirlo
         if (!found) {
-            strcpy(pizzas[num_pizzas].name, token);
-            pizzas[num_pizzas].count = 1;
+            strcpy(pizzas[num_pizzas].nombre, token);
+            pizzas[num_pizzas].cont = 1;
             num_pizzas++;
         }
     }
@@ -156,24 +156,24 @@ int pms() {
     fclose(archivo);
 
     // Encontrar la cantidad máxima de ventas
-    int max_sales = pizzas[0].count;
+    int max_ventas = pizzas[0].cont;
     for (int i = 1; i < num_pizzas; i++) {
-        if (pizzas[i].count > max_sales) {
-            max_sales = pizzas[i].count;
+        if (pizzas[i].cont > max_ventas) {
+            max_ventas = pizzas[i].cont;
         }
     }
 
     // Imprimir las pizzas más vendidas
     printf("Pizzas mas vendidas: ");
     for (int i = 0; i < num_pizzas; i++) {
-        if (pizzas[i].count == max_sales) {
-            printf("%s\n", pizzas[i].name);
+        if (pizzas[i].cont == max_ventas) {
+            printf("%s\n", pizzas[i].nombre);
         }
     }
 
     return 0;
 }
-#define MAX_DATES 10000
+#define max_fecha 10000
 #define DATE_LENGTH 11
 
 typedef struct {
@@ -183,21 +183,21 @@ typedef struct {
 
 int dms() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
-    DateSales dates[MAX_DATES];
+    DateSales dates[max_fecha];
     int num_dates = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
     // Inicializar total de ventas para cada fecha
-    for (int i = 0; i < MAX_DATES; i++) {
+    for (int i = 0; i < max_fecha; i++) {
         dates[i].total_sales = 0.0f;
     }
 
@@ -237,38 +237,38 @@ int dms() {
     fclose(archivo);
 
     // Encontrar la fecha con más ventas
-    float max_sales = dates[0].total_sales;
+    float max_ventas = dates[0].total_sales;
     char *best_selling_date = dates[0].date;
     for (int i = 1; i < num_dates; i++) {
-        if (dates[i].total_sales > max_sales) {
-            max_sales = dates[i].total_sales;
+        if (dates[i].total_sales > max_ventas) {
+            max_ventas = dates[i].total_sales;
             best_selling_date = dates[i].date;
         }
     }
 
     // Imprimir la fecha con más ventas en términos de dinero
-    printf("La fecha con menos ventas en terminos de dinero es: %s\nCon el monto vendido: %f\n", best_selling_date, max_sales);
+    printf("La fecha con menos ventas en terminos de dinero es: %s\nCon el monto vendido: %f\n", best_selling_date, max_ventas);
 
     return 0;
 }
 
 int dls() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
-    DateSales dates[MAX_DATES];
+    DateSales dates[max_fecha];
     int num_dates = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
     // Inicializar total de ventas para cada fecha
-    for (int i = 0; i < MAX_DATES; i++) {
+    for (int i = 0; i < max_fecha; i++) {
         dates[i].total_sales = 0.0f;
     }
 
@@ -312,22 +312,22 @@ int dls() {
     num_dates--;
 
    // Encontrar la fecha con menos ventas
-    float min_sales = dates[0].total_sales;
+    float min_ventas = dates[0].total_sales;
     char *worst_selling_date = dates[0].date;
     for (int i = 1; i < num_dates; i++) {
-        if (dates[i].total_sales < min_sales) {
-            min_sales = dates[i].total_sales;
+        if (dates[i].total_sales < min_ventas) {
+            min_ventas = dates[i].total_sales;
             worst_selling_date = dates[i].date;
         }
     }
     // Imprimir la fecha con más ventas en términos de dinero
-    printf("La fecha con menos ventas en terminos de dinero es: %s\nCon el monto vendido: %f\n", worst_selling_date, min_sales);
+    printf("La fecha con menos ventas en terminos de dinero es: %s\nCon el monto vendido: %f\n", worst_selling_date, min_ventas);
 
     return 0;
 }
 
 #define DATE_LENGTH 11 // Longitud máxima de una fecha en formato DD-MM-YYYY
-#define MAX_DATES 10000
+#define max_fechas 10000
 typedef struct {
     char date[DATE_LENGTH];
     int total_quantity;
@@ -335,21 +335,21 @@ typedef struct {
 
 char dmsp() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
-    DateSales_pizza dates[MAX_DATES];
+    DateSales_pizza dates[max_fechas];
     int num_dates = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return NULL;
     }
 
     // Inicializar total de cantidad de pizzas vendidas para cada fecha
-    for (int i = 0; i < MAX_DATES; i++) {
+    for (int i = 0; i < max_fechas; i++) {
         dates[i].total_quantity = 0;
     }
 
@@ -423,21 +423,21 @@ char dmsp() {
 
 char dlsp() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
-    DateSales_pizza dates[MAX_DATES];
+    DateSales_pizza dates[max_fechas];
     int num_dates = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return NULL;
     }
 
     // Inicializar total de cantidad de pizzas vendidas para cada fecha
-    for (int i = 0; i < MAX_DATES; i++) {
+    for (int i = 0; i < max_fechas; i++) {
         dates[i].total_quantity = 0;
     }
 
@@ -511,22 +511,22 @@ char dlsp() {
 #define MAX_INGREDIENTS 1000
 
 typedef struct {
-    char name[max_char_por_linea];
-    int count;
+    char nombre[max_char_por_linea];
+    int cont;
 } IngredientCount;
 
 int ims() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[max_char_por_linea];
     char *token;
     IngredientCount ingredients[MAX_INGREDIENTS];
     int num_ingredients = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
@@ -554,7 +554,7 @@ int ims() {
             // Verificar si el ingrediente ya está en la lista
             int found = -1;
             for (int i = 0; i < num_ingredients; i++) {
-                if (strcmp(ingredients[i].name, ingredient) == 0) {
+                if (strcmp(ingredients[i].nombre, ingredient) == 0) {
                     found = i;
                     break;
                 }
@@ -562,11 +562,11 @@ int ims() {
 
             // Si el ingrediente no está en la lista, añadirlo
             if (found == -1) {
-                strcpy(ingredients[num_ingredients].name, ingredient);
-                ingredients[num_ingredients].count = 1;
+                strcpy(ingredients[num_ingredients].nombre, ingredient);
+                ingredients[num_ingredients].cont = 1;
                 num_ingredients++;
             } else {
-                ingredients[found].count++;
+                ingredients[found].cont++;
             }
 
             // Obtener el siguiente ingrediente
@@ -580,16 +580,16 @@ int ims() {
     // Encontrar la cantidad máxima de ventas de un ingrediente
     int max_sales = 0;
     for (int i = 0; i < num_ingredients; i++) {
-        if (ingredients[i].count > max_sales) {
-            max_sales = ingredients[i].count;
+        if (ingredients[i].cont > max_sales) {
+            max_sales = ingredients[i].cont;
         }
     }
 
     // Imprimir los ingredientes más vendidos
     printf("Ingredientes mas vendidos:\n");
     for (int i = 0; i < num_ingredients; i++) {
-        if (ingredients[i].count == max_sales) {
-            printf("%s\n", ingredients[i].name);
+        if (ingredients[i].cont == max_sales) {
+            printf("%s\n", ingredients[i].nombre);
         }
     }
 
@@ -598,21 +598,21 @@ int ims() {
 
 typedef struct {
     char category[max_char_por_linea];
-    int count;
+    int cont;
 } PizzaCategoryCount;
 
 int hp() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[max_char_por_linea];
     char *token;
     PizzaCategoryCount categories[max_char_por_linea];
     int num_categories = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
@@ -647,10 +647,10 @@ int hp() {
         // Si la categoría no está en la lista, añadirla
         if (found == -1) {
             strcpy(categories[num_categories].category, token);
-            categories[num_categories].count = 1;
+            categories[num_categories].cont = 1;
             num_categories++;
         } else {
-            categories[found].count++;
+            categories[found].cont++;
         }
     }
 
@@ -665,7 +665,7 @@ int hp() {
     // Imprimir la cantidad de pizzas vendidas por categoría
     printf("Cantidad de pizzas vendidas por categoria:\n");
     for (int i = 0; i < num_categories; i++) {
-        printf("%s: %d\n", categories[i].category, categories[i].count);
+        printf("%s: %d\n", categories[i].category, categories[i].cont);
     }
 
     return 0;
@@ -679,16 +679,16 @@ typedef struct {
 
 int apo() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[max_char_por_linea];
     char *token;
     OrderPizzaCount orders[max_char_por_linea];
     int num_orders = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
@@ -742,7 +742,7 @@ int apo() {
     return 0;
 }
 
-#define MAX_DATES 100
+#define max_fechas 100
 
 typedef struct {
     char date[11];
@@ -751,21 +751,21 @@ typedef struct {
 
 int apd() {
     FILE *archivo;
-    char filename[] = "ventas.csv";
+    char nombre_archivo[] = "ventas.csv";
     char line[1024];
     char *token;
-    DatePizzas dates[MAX_DATES];
+    DatePizzas dates[max_fechas];
     int num_dates = 0;
 
     // Abrir archivo
-    archivo = fopen(filename, "r");
+    archivo = fopen(nombre_archivo, "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s.\n", filename);
+        printf("No se pudo abrir el archivo %s.\n", nombre_archivo);
         return 1;
     }
 
     // Inicializar total de pizzas para cada fecha
-    for (int i = 0; i < MAX_DATES; i++) {
+    for (int i = 0; i < max_fechas; i++) {
         dates[i].num_pizzas = 0;
     }
 
