@@ -832,11 +832,10 @@ int main(int argc, char *argv[]) {
         printf("Uso: %s [nombre_archivo.csv] [funcion1] [funcion2] ...\n", argv[0]);
         return 1;
     }
-    while(getchar() != '\n');
-    char *function_name = getchar();
+
     // Llama a las funciones especificadas en los argumentos de la línea de comandos
     for (int i = 2; i < argc; i++) {
-        // char *function_name = argv[i];
+        char *function_name = argv[i];
         char *result = NULL;
 
         // Llama a la función correspondiente

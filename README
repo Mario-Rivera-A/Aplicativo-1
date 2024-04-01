@@ -1,3 +1,7 @@
 Integrantes:
 - Benjamín Maldonado
 - Mario Rivera
+
+# Modo de ejecución
+
+Se debe ejecutar con el comando mingw32-make en la terminal y posteriormente como se menciona en los requerimientos funcionales del sistema, con "./app1 ventas.csv metrica0 metrica1"
