@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_CHAR_PER_LINE 1000
-#define MAX_PIZZA_NAME_LENGTH 1000
-#define MAX_ORDERS 1000
+#define max_char_por_linea 1000
+#define max_largo_nom_pizza 1000
+#define max_orders 1000
 typedef struct {
-    char name[MAX_PIZZA_NAME_LENGTH];
+    char name[max_largo_nom_pizza];
     int count;
 } PizzaCount;
 
@@ -14,35 +14,35 @@ typedef struct {
 typedef struct {
     int pizza_id;
     int order_id;
-    char pizza_name_id[MAX_PIZZA_NAME_LENGTH];
+    char pizza_name_id[max_largo_nom_pizza];
     int quantity;
     char order_date[11];
     char order_time[9];
     float unit_price;
     float total_price;
     char pizza_size;
-    char pizza_category[MAX_PIZZA_NAME_LENGTH];
+    char pizza_category[max_largo_nom_pizza];
     char pizza_ingredients[500];
-    char pizza_name[MAX_PIZZA_NAME_LENGTH];
+    char pizza_name[max_largo_nom_pizza];
 } Order;
 
 int pls() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
-    PizzaCount pizzas[MAX_CHAR_PER_LINE];
+    PizzaCount pizzas[max_char_por_linea];
     int num_pizzas = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener el nombre de la pizza
         token = strtok(line, ";");
         token = strtok(NULL, ";"); // Ignorar order_id
@@ -79,7 +79,7 @@ int pls() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     // Encontrar la cantidad mínima de ventas
     int min_sales = pizzas[0].count;
@@ -101,22 +101,22 @@ int pls() {
 }
 
 int pms() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
-    PizzaCount pizzas[MAX_CHAR_PER_LINE];
+    PizzaCount pizzas[max_char_por_linea];
     int num_pizzas = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener el nombre de la pizza
         token = strtok(line, ";");
         token = strtok(NULL, ";"); // Ignorar order_id
@@ -153,7 +153,7 @@ int pms() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     // Encontrar la cantidad máxima de ventas
     int max_sales = pizzas[0].count;
@@ -182,7 +182,7 @@ typedef struct {
 } DateSales;
 
 int dms() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
@@ -190,8 +190,8 @@ int dms() {
     int num_dates = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
@@ -202,7 +202,7 @@ int dms() {
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener la fecha y el total de ventas
         token = strtok(line, ";"); // Ignorar pizza_id
         token = strtok(NULL, ";"); // Ignorar order_id
@@ -234,7 +234,7 @@ int dms() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     // Encontrar la fecha con más ventas
     float max_sales = dates[0].total_sales;
@@ -253,7 +253,7 @@ int dms() {
 }
 
 int dls() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
@@ -261,8 +261,8 @@ int dls() {
     int num_dates = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
@@ -273,7 +273,7 @@ int dls() {
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener la fecha y el total de ventas
         token = strtok(line, ";"); // Ignorar pizza_id
         token = strtok(NULL, ";"); // Ignorar order_id
@@ -305,7 +305,7 @@ int dls() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
     for(int i = 0; i < num_dates - 1; i++) {
         dates[i] = dates[i + 1];
     }
@@ -334,7 +334,7 @@ typedef struct {
 } DateSales_pizza;
 
 char dmsp() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
@@ -342,8 +342,8 @@ char dmsp() {
     int num_dates = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return NULL;
     }
@@ -354,7 +354,7 @@ char dmsp() {
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Ignorar las primeras 3 columnas
         token = strtok(line, ";");
         for (int i = 0; i < 3; i++) {
@@ -396,7 +396,7 @@ char dmsp() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
     
     for(int i = 0; i < num_dates - 1; i++) {
         dates[i] = dates[i + 1];
@@ -422,7 +422,7 @@ char dmsp() {
 }
 
 char dlsp() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
@@ -430,8 +430,8 @@ char dlsp() {
     int num_dates = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return NULL;
     }
@@ -442,7 +442,7 @@ char dlsp() {
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Ignorar las primeras 3 columnas
         token = strtok(line, ";");
         for (int i = 0; i < 3; i++) {
@@ -484,7 +484,7 @@ char dlsp() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
     
     for(int i = 0; i < num_dates - 1; i++) {
         dates[i] = dates[i + 1];
@@ -511,27 +511,27 @@ char dlsp() {
 #define MAX_INGREDIENTS 1000
 
 typedef struct {
-    char name[MAX_CHAR_PER_LINE];
+    char name[max_char_por_linea];
     int count;
 } IngredientCount;
 
 int ims() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
-    char line[MAX_CHAR_PER_LINE];
+    char line[max_char_por_linea];
     char *token;
     IngredientCount ingredients[MAX_INGREDIENTS];
     int num_ingredients = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener los ingredientes de la pizza
         token = strtok(line, ";");
         for (int i = 0; i < 9; i++) {
@@ -575,7 +575,7 @@ int ims() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     // Encontrar la cantidad máxima de ventas de un ingrediente
     int max_sales = 0;
@@ -597,27 +597,27 @@ int ims() {
 }
 
 typedef struct {
-    char category[MAX_CHAR_PER_LINE];
+    char category[max_char_por_linea];
     int count;
 } PizzaCategoryCount;
 
 int hp() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
-    char line[MAX_CHAR_PER_LINE];
+    char line[max_char_por_linea];
     char *token;
-    PizzaCategoryCount categories[MAX_CHAR_PER_LINE];
+    PizzaCategoryCount categories[max_char_por_linea];
     int num_categories = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener la categoría de la pizza
         token = strtok(line, ";"); // Ignorar la primera columna
         token = strtok(NULL, ";"); // Ignorar las siguientes 2 columnas
@@ -655,7 +655,7 @@ int hp() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     for(int i = 0; i < num_categories - 1; i++) {
         categories[i] = categories[i + 1];
@@ -678,22 +678,22 @@ typedef struct {
 } OrderPizzaCount;
 
 int apo() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
-    char line[MAX_CHAR_PER_LINE];
+    char line[max_char_por_linea];
     char *token;
-    OrderPizzaCount orders[MAX_CHAR_PER_LINE];
+    OrderPizzaCount orders[max_char_por_linea];
     int num_orders = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener el ID de orden y la cantidad de pizzas
         token = strtok(line, ";"); // Ignorar la primera columna
         int order_id = atoi(strtok(NULL, ";")); // Obtener el ID de orden
@@ -722,7 +722,7 @@ int apo() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     for(int i = 0; i < num_orders - 1; i++) {
         orders[i] = orders[i + 1];
@@ -750,7 +750,7 @@ typedef struct {
 } DatePizzas;
 
 int apd() {
-    FILE *file;
+    FILE *archivo;
     char filename[] = "ventas.csv";
     char line[1024];
     char *token;
@@ -758,8 +758,8 @@ int apd() {
     int num_dates = 0;
 
     // Abrir archivo
-    file = fopen(filename, "r");
-    if (file == NULL) {
+    archivo = fopen(filename, "r");
+    if (archivo == NULL) {
         printf("No se pudo abrir el archivo %s.\n", filename);
         return 1;
     }
@@ -770,7 +770,7 @@ int apd() {
     }
 
     // Leer archivo línea por línea
-    while (fgets(line, sizeof(line), file)) {
+    while (fgets(line, sizeof(line), archivo)) {
         // Obtener la fecha y el número de pizzas
         token = strtok(line, ";"); // Ignorar pizza_id
         token = strtok(NULL, ";"); // Ignorar order_id
@@ -806,7 +806,7 @@ int apd() {
     }
 
     // Cerrar archivo
-    fclose(file);
+    fclose(archivo);
 
     for(int i = 0; i < num_dates - 1; i++) {
         dates[i] = dates[i + 1];
